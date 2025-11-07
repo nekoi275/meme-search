@@ -96,7 +96,7 @@ onUnmounted(() => {
       <div class="lamp-bulb" :class="{ 'bulb-on': !isDarkTheme }">
         <img 
           :src="isDarkTheme ? '/src/assets/full-moon.png' : '/src/assets/sun.png'" 
-          :alt="isDarkTheme ? 'Full Moon' : 'Sun'"
+          :alt="isDarkTheme ? 'Темная тема' : 'Светлая тема'"
           class="theme-icon"
         />
       </div>
@@ -171,7 +171,7 @@ onUnmounted(() => {
 }
 
 .pull-handle {
-  width: 10px;
+  width: 20px;
   height: 20px;
   background: var(--black);
   border-radius: 6px;

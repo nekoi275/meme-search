@@ -1,9 +1,7 @@
 <template>
   <div class="initial-screen">
-    <!-- Cat rain background -->
     <CatRainBg />
     
-    <!-- Centered content -->
     <div class="content">
       <h1 class="main-title">Мемы для важных переговоров. Найдем за вас.</h1>
       <h3 class="subtitle">Качество ваших переговоров зависит от скорости мем-реакции. Мы ускоряем её. Система найдет нужный мем по описанию.</h3>

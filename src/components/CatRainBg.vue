@@ -12,7 +12,7 @@
         top: cat.startY + 'px'
       }"
     >
-      <img :src="cat.src" :alt="`Cat ${index + 1}`" />
+      <img :src="cat.src" :alt="`Мем с котом ${index + 1}`" />
     </div>
   </div>
 </template>
