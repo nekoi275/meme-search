@@ -22,7 +22,6 @@ import { ref, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 
-// Import all cat images
 import cat1 from '../assets/cats/cat1.png'
 import cat2 from '../assets/cats/cat2.png'
 import cat3 from '../assets/cats/cat3.png'
@@ -30,7 +29,6 @@ import cat4 from '../assets/cats/cat4.png'
 import cat5 from '../assets/cats/cat5.png'
 import cat6 from '../assets/cats/cat6.png'
 
-// Register Draggable plugin
 gsap.registerPlugin(Draggable)
 
 interface CatData {
@@ -45,22 +43,20 @@ interface CatData {
 const catRefs = ref<(HTMLElement | null)[]>([])
 const cats = ref<CatData[]>([])
 
-// Initialize cats with random properties
 const initializeCats = () => {
   const catImages = [cat1, cat2, cat3, cat4, cat5, cat6]
   const screenWidth = window.innerWidth
   
   cats.value = catImages.map(() => ({
     src: catImages[Math.floor(Math.random() * catImages.length)]!,
-    width: Math.random() * (250 - 100) + 100, // Random width between 100-250px
-    rotation: Math.random() * 360, // Random rotation 0-360 degrees
-    startX: Math.random() * screenWidth, // Random horizontal position
-    startY: -200, // Start above screen
+    width: Math.random() * (250 - 100) + 100,
+    rotation: Math.random() * 360,
+    startX: Math.random() * screenWidth,
+    startY: -200,
     isAnimating: true
   }))
 }
 
-// Create falling animation for each cat
 const animateCats = async () => {
   await nextTick()
   
@@ -69,62 +65,32 @@ const animateCats = async () => {
     if (!catElement) return
     
     const screenHeight = window.innerHeight + 100
-    const bounceHeight = 100
-    const fallDuration = Math.random() * 1.5 + 2.5 // Random duration 2.5-4 seconds
+    const fallDuration = Math.random() * 1.5 + 2.5
     
-    // Create timeline for falling animation
     const tl = gsap.timeline({
       onComplete: () => {
-        // Make cat draggable when animation completes
         cat.isAnimating = false
-        // Small delay to ensure final position is stable
-        setTimeout(() => {
-          makeDraggable(catElement)
-        }, 100)
+        makeDraggable(catElement)
       }
     })
     
-    // Fall from top to bottom with bounce
     tl.to(catElement, {
       y: screenHeight,
       duration: fallDuration,
-      ease: "power2.in" // Start slower, end faster (accelerate)
-    })
-    .to(catElement, {
-      y: screenHeight - bounceHeight,
-      duration: 0.3,
-      ease: "power2.out" // Start faster, end slower
-    })
-    .to(catElement, {
-      y: screenHeight,
-      duration: 0.15,
-      ease: "power2.out"
-    })
-    .to(catElement, {
-      y: screenHeight - bounceHeight * 0.3, // Smaller second bounce
-      duration: 0.2,
-      ease: "power2.out"
-    })
-    .to(catElement, {
-      y: screenHeight,
-      duration: 0.15,
-      ease: "power2.out"
+      ease: "power2.in"
     })
   })
 }
 
-// Make individual cat draggable
 const makeDraggable = (element: HTMLElement) => {
-  // Clear any existing transforms to ensure clean starting position
   gsap.set(element, { clearProps: "transform" })
   
   Draggable.create(element, {
     type: "x,y",
     bounds: "body",
     inertia: true,
-    liveSnap: false, // Prevent automatic position snapping
+    liveSnap: false,
     onDrag: function() {
-      // Optional: Add some rotation while dragging
       gsap.to(element, {
         rotation: `+=${Math.random() * 10 - 5}`,
         duration: 0.1
@@ -170,7 +136,6 @@ onMounted(() => {
   -webkit-user-drag: none;
 }
 
-/* Ensure cats don't interfere with other UI elements */
 .cat-image:hover {
   z-index: 10;
 }
