@@ -22,12 +22,7 @@ import { ref, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 
-import cat1 from '../assets/cats/cat1.png'
-import cat2 from '../assets/cats/cat2.png'
-import cat3 from '../assets/cats/cat3.png'
-import cat4 from '../assets/cats/cat4.png'
-import cat5 from '../assets/cats/cat5.png'
-import cat6 from '../assets/cats/cat6.png'
+const bgModules = import.meta.glob('../assets/bg/*.webp', { eager: true })
 
 gsap.registerPlugin(Draggable)
 
@@ -44,11 +39,15 @@ const catRefs = ref<(HTMLElement | null)[]>([])
 const cats = ref<CatData[]>([])
 
 const initializeCats = () => {
-  const catImages = [cat1, cat2, cat3, cat4, cat5, cat6]
+  const catImagePaths = Object.values(bgModules).map(module => (module as any).default)
+  if (catImagePaths.length === 0) {
+    console.warn('No cat images found')
+    return
+  }
   const screenWidth = window.innerWidth
   
-  cats.value = catImages.map(() => ({
-    src: catImages[Math.floor(Math.random() * catImages.length)]!,
+  cats.value = Array.from({ length: 10 }, () => ({
+    src: catImagePaths[Math.floor(Math.random() * catImagePaths.length)]!,
     width: Math.random() * (250 - 100) + 100,
     rotation: Math.random() * 360,
     startX: Math.random() * screenWidth,

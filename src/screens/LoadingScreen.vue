@@ -18,12 +18,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 
-import cat1 from '../assets/cats/cat1.png'
-import cat2 from '../assets/cats/cat2.png'
-import cat3 from '../assets/cats/cat3.png'
-import cat4 from '../assets/cats/cat4.png'
-import cat5 from '../assets/cats/cat5.png'
-import cat6 from '../assets/cats/cat6.png'
+const bgModules = import.meta.glob('../assets/bg/*.webp', { eager: true })
 
 interface CatData {
   src: string
@@ -38,12 +33,16 @@ const cats = ref<CatData[]>([])
 const animations: gsap.core.Tween[] = []
 
 const initializeCats = () => {
-  const catImages = [cat1, cat2, cat3, cat4, cat5, cat6]
+  const catImagePaths = Object.values(bgModules).map(module => (module as any).default)
+  if (catImagePaths.length === 0) {
+    console.warn('No cat images found')
+    return
+  }
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
   
-  cats.value = catImages.map((img) => ({
-    src: img,
+  cats.value = Array.from({ length: 10 }, () => ({
+    src: catImagePaths[Math.floor(Math.random() * catImagePaths.length)]!,
     width: Math.random() * (150 - 80) + 80,
     rotation: Math.random() * 360,
     x: Math.random() * (screenWidth - 150),
