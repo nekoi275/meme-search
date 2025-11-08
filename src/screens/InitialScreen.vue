@@ -5,6 +5,7 @@
     <div class="content">
       <h1 class="main-title">Мемы для важных переговоров. Найдем за вас.</h1>
       <h3 class="subtitle">Качество ваших переговоров зависит от скорости мем-реакции. Мы ускоряем её. Система найдет нужный мем по описанию.</h3>
+      <button>Начать поиск</button>
     </div>
   </div>
 </template>
@@ -15,10 +16,6 @@ import CatRainBg from '../components/CatRainBg.vue'
 
 <style scoped>
 .initial-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -40,7 +37,6 @@ import CatRainBg from '../components/CatRainBg.vue'
 }
 
 .main-title {
-  font-family: 'Kurland', serif;
   font-size: 3.5rem;
   font-weight: bold;
   color: var(--text-color);
@@ -50,15 +46,15 @@ import CatRainBg from '../components/CatRainBg.vue'
 }
 
 .subtitle {
-  font-family: 'Kurland', serif;
   font-size: 1.5rem;
   font-weight: normal;
   color: var(--text-color);
-  margin: 0;
+  margin-bottom: 2rem;
   line-height: 1.4;
   opacity: 0.9;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
+
 
 /* Responsive design */
 @media (max-width: 768px) {

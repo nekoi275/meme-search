@@ -3,12 +3,24 @@ import { ref, onMounted } from "vue";
 import { gsap } from "gsap";
 import ThemeToggle from "./ThemeToggle.vue";
 
+const props = defineProps<{
+  currentScreen?: "initial" | "result";
+}>();
+
+const emit = defineEmits<{
+  (e: "random-meme"): void;
+  (e: "return-to-initial"): void;
+}>();
+
 const randomIconRef = ref<HTMLImageElement | null>(null);
 let spinAnimation: gsap.core.Tween | null = null;
 
 const handleRandomMeme = () => {
-  // TODO: Implement random meme functionality
-  console.log("Random meme clicked");
+  emit("random-meme");
+};
+
+const handleReturnToInitialScreen = () => {
+  emit("return-to-initial");
 };
 
 const startSpin = () => {
@@ -44,6 +56,14 @@ onMounted(() => {
 <template>
   <header class="header">
     <div class="header-content">
+      <img
+        src="/src/assets/logo.png"
+        width="100"
+        height="100"
+        alt="Логотип"
+        class="logo"
+        @click="handleReturnToInitialScreen"
+      />
       <button
         @click="handleRandomMeme"
         @mouseenter="startSpin"
@@ -56,9 +76,11 @@ onMounted(() => {
           alt="Случайный мем"
           class="random-icon"
         />
-        <span class="btn-label">Случайный мем</span>
+        <span>Случайный мем</span>
       </button>
-
+      <button v-if="props.currentScreen === 'result'">
+        Начать поиск
+      </button>
       <ThemeToggle />
     </div>
   </header>
@@ -70,6 +92,7 @@ onMounted(() => {
   top: 0;
   left: 0;
   right: 0;
+  height: 7rem;
   background-color: var(--secondary-color);
   z-index: 1000;
   border-bottom: 4px solid var(--black);
@@ -79,28 +102,16 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  height: 100%;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .random-meme-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: transparent;
-  color: var(--text-color);
-  border: 3px dotted var(--accent-color);
-  padding: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 0px;
-}
-
-.random-meme-btn:hover {
-  border: 3px solid var(--accent-color);
 }
 
 .random-icon {
@@ -111,9 +122,10 @@ onMounted(() => {
   transition: filter 0.3s ease;
 }
 
-.btn-label {
-  font-family: "Kurland", serif;
-  font-weight: 500;
+.logo {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -122,6 +134,11 @@ onMounted(() => {
   }
 
   .random-meme-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  button {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
@@ -143,6 +160,12 @@ onMounted(() => {
 
   .random-meme-btn {
     padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
   }
 
   .random-icon {

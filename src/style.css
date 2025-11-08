@@ -6,8 +6,17 @@
   font-display: swap;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Kurland', serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -29,64 +38,32 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: var(--accent-color);
-  text-decoration: inherit;
-}
-a:hover {
-  color: var(--text-color);
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Kurland', serif;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--accent-color);
-  color: var(--text-color);
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: var(--text-color);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 .light-theme {
   --background-color: #CFF7FF;
   --text-color: #1a1a2e;
   --accent-color: #d741c6;
   --secondary-color: #FDDDC1;
+}
+
+button {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 3px dotted var(--accent-color);
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  height: 60px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0px;
+  outline: none;
+}
+
+button:hover {
+  border: 3px solid var(--accent-color);
+}
+
+button:focus,
+button:active {
+  outline: none;
 }
