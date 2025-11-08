@@ -50,7 +50,6 @@ onMounted(() => {
 
 <style scoped>
 .result-screen {
-  height: 100vh;
   background-color: var(--background-color);
   padding-top: 8rem;
 }
