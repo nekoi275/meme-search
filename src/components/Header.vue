@@ -57,7 +57,7 @@ onMounted(() => {
   <header class="header">
     <div class="header-content">
       <img
-        src="/src/assets/logo.png"
+        src="/src/assets/logo.webp"
         width="100"
         height="100"
         alt="Логотип"
