@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import InitialScreen from './screens/InitialScreen.vue'
-import ResultScreen from './screens/ResultScreen.vue'
+import RandomMemeScreen from './screens/RandomMemeScreen.vue'
 import LoadingScreen from './screens/LoadingScreen.vue'
 import Header from './components/Header.vue'
 
@@ -48,7 +48,7 @@ const handleReturnToInitialScreen = () => {
     @return-to-initial="handleReturnToInitialScreen"
   />
   <InitialScreen v-if="!isLoading && currentScreen === 'initial'" />
-  <ResultScreen 
+  <RandomMemeScreen 
     v-if="!isLoading && currentScreen === 'result'"
     :telegram-url="resultUrl" 
   />
