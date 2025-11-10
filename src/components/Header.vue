@@ -57,7 +57,7 @@ onMounted(() => {
   <header class="header">
     <div class="header-content">
       <img
-        src="/src/assets/logo_L.webp"
+        src="/src/assets/logo.png"
         width="100"
         height="100"
         alt="Логотип"
@@ -72,7 +72,7 @@ onMounted(() => {
       >
         <img
           ref="randomIconRef"
-          src="/src/assets/random_L.png"
+          src="/src/assets/random.png"
           alt="Случайный мем"
           class="random-icon"
         />
