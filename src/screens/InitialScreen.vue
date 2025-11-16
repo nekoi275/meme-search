@@ -1,6 +1,6 @@
 <template>
   <div class="initial-screen">
-    <CatRainBg />
+    <AnimatedMemesBg />
     
     <div class="content">
       <h1 class="main-title">Мемы для важных переговоров. Найдем за вас.</h1>
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import CatRainBg from '../components/CatRainBg.vue'
+import AnimatedMemesBg from '../components/AnimatedMemesBg.vue'
 </script>
 
 <style scoped>

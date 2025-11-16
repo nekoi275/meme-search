@@ -95,7 +95,10 @@ onUnmounted(() => {
     <div ref="lampRef" class="lamp">
       <div class="lamp-bulb" :class="{ 'bulb-on': !isDarkTheme }">
         <img 
-          :src="isDarkTheme ? '/src/assets/full-moon.png' : '/src/assets/sun.png'" 
+          :srcset="isDarkTheme 
+            ? '/src/assets/full-moon_S.png 1x, /src/assets/full-moon_M.png 2x, /src/assets/full-moon_L.png 3x'
+            : '/src/assets/sun_S.png 1x, /src/assets/sun_M.png 2x, /src/assets/sun_L.png 3x'"
+          :src="isDarkTheme ? '/src/assets/full-moon_M.png' : '/src/assets/sun_M.png'"
           :alt="isDarkTheme ? 'Темная тема' : 'Светлая тема'"
           class="theme-icon"
         />

@@ -57,7 +57,8 @@ onMounted(() => {
   <header class="header">
     <div class="header-content">
       <img
-        src="/src/assets/logo.png"
+        srcset="/src/assets/logo_S.webp 1x, /src/assets/logo_M.webp 2x, /src/assets/logo_L.webp 3x"
+        src="/src/assets/logo_M.webp"
         width="100"
         height="100"
         alt="Логотип"
@@ -72,7 +73,8 @@ onMounted(() => {
       >
         <img
           ref="randomIconRef"
-          src="/src/assets/random.png"
+          srcset="/src/assets/random_S.png 1x, /src/assets/random_M.png 2x, /src/assets/random_L.png 3x"
+          src="/src/assets/random_M.png"
           alt="Случайный мем"
           class="random-icon"
         />
