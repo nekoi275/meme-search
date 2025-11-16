@@ -5,18 +5,34 @@ import RandomMemeScreen from './screens/RandomMemeScreen.vue'
 import ResultScreen from './screens/ResultScreen.vue'
 import LoadingScreen from './screens/LoadingScreen.vue'
 import Header from './components/Header.vue'
-import { fetchRandomMeme } from './api'
+import { fetchRandomMemes, type RandomMemeResponse } from './api'
 
 const currentScreen = ref<'initial' | 'result' | 'search'>('initial')
 const resultUrl = ref<string>('')
 const isLoading = ref<boolean>(false)
 
+const handleRandomResponse = (response: RandomMemeResponse[]): string | null => {
+  if (response.length > 0) {
+    const firstItem = response[0]
+    if (firstItem && firstItem.urls && firstItem.urls.length > 0) {
+      const firstUrl = firstItem.urls[0]
+      if (firstUrl) {
+        return firstUrl
+      }
+    }
+  }
+  return null
+}
+
 const handleRandomMeme = async () => {
   isLoading.value = true
   currentScreen.value = 'result'
   try {
-    const url = await fetchRandomMeme(1)
-    resultUrl.value = url
+    const response = await fetchRandomMemes(1)
+    const firstUrl = handleRandomResponse(response)
+    if (firstUrl) {
+      resultUrl.value = firstUrl
+    }
   } catch (error) {
     console.error('Error fetching random meme:', error)
   } finally {

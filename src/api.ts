@@ -1,7 +1,14 @@
 const API_URL = 'https://b7ywm2txkojn4qe4wtb6ivlo3e0wejwr.lambda-url.eu-west-1.on.aws'
 const SEARCH_RESULTS_COUNT = 10
 
-export const fetchRandomMeme = async (n: number = 1): Promise<string> => {
+export interface RandomMemeResponse {
+  id: number
+  modality: string
+  score: number
+  urls: string[]
+}
+
+export const fetchRandomMemes = async (n: number = 1): Promise<RandomMemeResponse[]> => {
   const response = await fetch(`${API_URL}/random?n=${n}`, {
     method: 'GET',
     headers: {
@@ -14,7 +21,7 @@ export const fetchRandomMeme = async (n: number = 1): Promise<string> => {
   }
   
   const data = await response.json()
-  return data.url
+  return data
 }
 
 export const searchByText = async (q: string): Promise<string[]> => {
