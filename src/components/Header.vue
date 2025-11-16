@@ -4,12 +4,13 @@ import { gsap } from "gsap";
 import ThemeToggle from "./ThemeToggle.vue";
 
 const props = defineProps<{
-  currentScreen?: "initial" | "result";
+  currentScreen?: "initial" | "result" | "search";
 }>();
 
 const emit = defineEmits<{
   (e: "random-meme"): void;
   (e: "return-to-initial"): void;
+  (e: "search"): void;
 }>();
 
 const randomIconRef = ref<HTMLImageElement | null>(null);
@@ -21,6 +22,10 @@ const handleRandomMeme = () => {
 
 const handleReturnToInitialScreen = () => {
   emit("return-to-initial");
+};
+
+const handleSearch = () => {
+  emit("search");
 };
 
 const startSpin = () => {
@@ -80,7 +85,7 @@ onMounted(() => {
         />
         <span>Случайный мем</span>
       </button>
-      <button v-if="props.currentScreen === 'result'">
+      <button v-if="props.currentScreen === 'result' || props.currentScreen === 'search'" @click="handleSearch">
         Начать поиск
       </button>
       <ThemeToggle />

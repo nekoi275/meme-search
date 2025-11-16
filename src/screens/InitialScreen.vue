@@ -5,13 +5,21 @@
     <div class="content">
       <h1 class="main-title">Мемы для важных переговоров. Найдем за вас.</h1>
       <h3 class="subtitle">Качество ваших переговоров зависит от скорости мем-реакции. Мы ускоряем её. Система найдет нужный мем по описанию.</h3>
-      <button>Начать поиск</button>
+      <button @click="handleSearch">Начать поиск</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import AnimatedMemesBg from '../components/AnimatedMemesBg.vue'
+
+const emit = defineEmits<{
+  (e: 'search'): void
+}>()
+
+const handleSearch = () => {
+  emit('search')
+}
 </script>
 
 <style scoped>
@@ -55,8 +63,6 @@ import AnimatedMemesBg from '../components/AnimatedMemesBg.vue'
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-
-/* Responsive design */
 @media (max-width: 768px) {
   .main-title {
     font-size: 2.5rem;
