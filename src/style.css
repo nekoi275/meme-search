@@ -48,19 +48,20 @@
 button {
   background-color: transparent;
   color: var(--text-color);
-  border: 3px dotted var(--accent-color);
+  border: 2px solid var(--accent-color);
+  border-bottom: 8px solid var(--accent-color);
   padding: 0.5rem 1rem;
   font-size: 1.2rem;
   font-weight: 500;
   height: 60px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 0px;
+  border-radius: 8px;
   outline: none;
 }
 
 button:hover {
-  border: 3px solid var(--accent-color);
+  border: 2px solid var(--accent-color);
 }
 
 button:focus,

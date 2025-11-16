@@ -118,6 +118,13 @@ onUnmounted(() => {
 <style scoped>
 .loading-screen {
   height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: transparent;
+  z-index: 1000;
 }
 
 .meme-image {

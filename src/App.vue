@@ -4,6 +4,7 @@ import InitialScreen from './screens/InitialScreen.vue'
 import RandomMemeScreen from './screens/RandomMemeScreen.vue'
 import LoadingScreen from './screens/LoadingScreen.vue'
 import Header from './components/Header.vue'
+import { fetchRandomMeme } from './api'
 
 const currentScreen = ref<'initial' | 'result'>('initial')
 const resultUrl = ref<string>('')
@@ -11,21 +12,10 @@ const isLoading = ref<boolean>(false)
 
 const handleRandomMeme = async () => {
   isLoading.value = true
+  currentScreen.value = 'result'
   try {
-    const response = await fetch('https://b7ywm2txkojn4qe4wtb6ivlo3e0wejwr.lambda-url.eu-west-1.on.aws/random', {
-      method: 'GET',
-      headers: {
-        'accept': 'application/json'
-      }
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch random meme')
-    }
-    
-    const data = await response.json()
-    resultUrl.value = data.url
-    currentScreen.value = 'result'
+    const url = await fetchRandomMeme()
+    resultUrl.value = url
   } catch (error) {
     console.error('Error fetching random meme:', error)
   } finally {
@@ -42,14 +32,13 @@ const handleReturnToInitialScreen = () => {
 <template>
   <LoadingScreen v-if="isLoading" />
   <Header 
-    v-if="!isLoading"
     :current-screen="currentScreen"
     @random-meme="handleRandomMeme"
     @return-to-initial="handleReturnToInitialScreen"
   />
-  <InitialScreen v-if="!isLoading && currentScreen === 'initial'" />
+  <InitialScreen v-if="currentScreen === 'initial'" />
   <RandomMemeScreen 
-    v-if="!isLoading && currentScreen === 'result'"
+    v-if="currentScreen === 'result'"
     :telegram-url="resultUrl" 
   />
 </template>
