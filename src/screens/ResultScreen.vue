@@ -22,10 +22,10 @@ import TelegramWidget from '../components/TelegramWidget.vue'
 import type { MemeResponse } from '../api'
 
 const searchBlockRef = ref<InstanceType<typeof SearchBlock> | null>(null)
-const localSearchResults = ref<MemeResponse[]>([])
+const searchResults = ref<MemeResponse[]>([])
 
 const displayResults = computed(() => {
-  return localSearchResults.value
+  return searchResults.value
 })
 
 const allUrls = computed(() => {
@@ -39,7 +39,7 @@ const allUrls = computed(() => {
 })
 
 const handleSearchResults = (results: MemeResponse[]) => {
-  localSearchResults.value = results
+  searchResults.value = results
 }
 
 defineExpose({
