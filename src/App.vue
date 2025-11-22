@@ -5,16 +5,14 @@ import RandomMemeScreen from './screens/RandomMemeScreen.vue'
 import ResultScreen from './screens/ResultScreen.vue'
 import LoadingScreen from './screens/LoadingScreen.vue'
 import Header from './components/Header.vue'
-import { fetchRandomMemes, type RandomMemeResponse } from './api'
+import { fetchRandomMemes, type MemeResponse } from './api'
 
 const currentScreen = ref<'initial' | 'result' | 'search'>('initial')
 const resultUrl = ref<string>('')
 const isLoading = ref<boolean>(false)
 const resultScreenRef = ref<InstanceType<typeof ResultScreen> | null>(null)
-const searchBlockScaledOut = ref(false)
-const searchResults = ref<RandomMemeResponse[]>([])
 
-const handleRandomResponse = (response: RandomMemeResponse[]): string | null => {
+const handleRandomResponse = (response: MemeResponse[]): string | null => {
   if (response.length > 0) {
     const firstItem = response[0]
     if (firstItem && firstItem.urls && firstItem.urls.length > 0) {
@@ -43,26 +41,17 @@ const handleRandomMeme = async () => {
   }
 }
 
-const handleSearch = async () => {
+const handleSearchButtonClick = async () => {
   currentScreen.value = 'search'
   await nextTick()
-  if (resultScreenRef.value?.searchBlockRef && searchBlockScaledOut.value) {
+  if (resultScreenRef.value?.searchBlockRef) {
     resultScreenRef.value.searchBlockRef.animateInIfScaledOut()
   }
-}
-
-const handleSearchBlockScaledOut = (scaledOut: boolean) => {
-  searchBlockScaledOut.value = scaledOut
 }
 
 const handleReturnToInitialScreen = () => {
   currentScreen.value = 'initial'
   resultUrl.value = ''
-  searchResults.value = []
-}
-
-const handleSearchResults = (results: RandomMemeResponse[]) => {
-  searchResults.value = results
 }
 </script>
 
@@ -72,9 +61,9 @@ const handleSearchResults = (results: RandomMemeResponse[]) => {
     :current-screen="currentScreen"
     @random-meme="handleRandomMeme"
     @return-to-initial="handleReturnToInitialScreen"
-    @search="handleSearch"
+    @search="handleSearchButtonClick"
   />
-  <InitialScreen v-if="currentScreen === 'initial'" @search="handleSearch" />
+  <InitialScreen v-if="currentScreen === 'initial'" @search="handleSearchButtonClick" />
   <RandomMemeScreen 
     v-if="currentScreen === 'result'"
     :telegram-url="resultUrl" 
@@ -82,10 +71,6 @@ const handleSearchResults = (results: RandomMemeResponse[]) => {
   <ResultScreen 
     v-if="currentScreen === 'search'" 
     ref="resultScreenRef" 
-    :initial-scaled-out="searchBlockScaledOut"
-    :search-results="searchResults"
-    @search-block-scaled-out="handleSearchBlockScaledOut"
-    @search-results="handleSearchResults"
   />
 </template>
 

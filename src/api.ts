@@ -1,14 +1,14 @@
 const API_URL = 'https://b7ywm2txkojn4qe4wtb6ivlo3e0wejwr.lambda-url.eu-west-1.on.aws'
 const SEARCH_RESULTS_COUNT = 10
 
-export interface RandomMemeResponse {
+export interface MemeResponse {
   id: number
   modality: string
   score: number
   urls: string[]
 }
 
-export const fetchRandomMemes = async (n: number = 1): Promise<RandomMemeResponse[]> => {
+export const fetchRandomMemes = async (n: number = 1): Promise<MemeResponse[]> => {
   const response = await fetch(`${API_URL}/random?n=${n}`, {
     method: 'GET',
     headers: {
@@ -24,7 +24,7 @@ export const fetchRandomMemes = async (n: number = 1): Promise<RandomMemeRespons
   return data
 }
 
-export const searchByText = async (q: string): Promise<RandomMemeResponse[]> => {
+export const searchByText = async (q: string): Promise<MemeResponse[]> => {
   const encodedQuery = encodeURIComponent(q)
   const response = await fetch(`${API_URL}/search?q=${encodedQuery}&n=${SEARCH_RESULTS_COUNT}`, {
     method: 'GET',
@@ -41,7 +41,7 @@ export const searchByText = async (q: string): Promise<RandomMemeResponse[]> => 
   return Array.isArray(data) ? data : [data]
 }
 
-export const searchByImageText = async (q: string, image: File): Promise<RandomMemeResponse[]> => {
+export const searchByImageText = async (q: string, image: File): Promise<MemeResponse[]> => {
   const formData = new FormData()
   formData.append('q', q)
   formData.append('n', SEARCH_RESULTS_COUNT.toString())

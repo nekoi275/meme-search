@@ -1,9 +1,8 @@
 <template>
   <div class="result-screen">
-    <SearchBlock 
+    <SearchBlock
+      class="search-block"
       ref="searchBlockRef" 
-      :initial-scaled-out="props.initialScaledOut"
-      @scaled-out-change="handleScaledOutChange"
       @search-results="handleSearchResults"
     />
     <div v-if="displayResults.length > 0" class="results-container">
@@ -20,25 +19,13 @@
 import { ref, computed } from 'vue'
 import SearchBlock from '../components/SearchBlock.vue'
 import TelegramWidget from '../components/TelegramWidget.vue'
-import type { RandomMemeResponse } from '../api'
-
-const props = defineProps<{
-  initialScaledOut?: boolean
-  searchResults?: RandomMemeResponse[]
-}>()
-
-const emit = defineEmits<{
-  (e: 'search-block-scaled-out', value: boolean): void
-  (e: 'search-results', results: RandomMemeResponse[]): void
-}>()
+import type { MemeResponse } from '../api'
 
 const searchBlockRef = ref<InstanceType<typeof SearchBlock> | null>(null)
-const localSearchResults = ref<RandomMemeResponse[]>([])
+const localSearchResults = ref<MemeResponse[]>([])
 
 const displayResults = computed(() => {
-  return props.searchResults && props.searchResults.length > 0 
-    ? props.searchResults 
-    : localSearchResults.value
+  return localSearchResults.value
 })
 
 const allUrls = computed(() => {
@@ -51,13 +38,8 @@ const allUrls = computed(() => {
   return urls
 })
 
-const handleScaledOutChange = (scaledOut: boolean) => {
-  emit('search-block-scaled-out', scaledOut)
-}
-
-const handleSearchResults = (results: RandomMemeResponse[]) => {
+const handleSearchResults = (results: MemeResponse[]) => {
   localSearchResults.value = results
-  emit('search-results', results)
 }
 
 defineExpose({
@@ -93,6 +75,13 @@ defineExpose({
   margin-bottom: 2rem;
   display: inline-block;
   width: 100%;
+}
+
+.search-block {
+  position: absolute;
+  top: 10rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 @media (max-width: 1024px) {

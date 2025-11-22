@@ -49,20 +49,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref } from 'vue'
 import { gsap } from 'gsap'
-import { fetchRandomMemes, searchByText, searchByImageText, type RandomMemeResponse } from '../api'
-
-const props = defineProps<{
-  initialScaledOut?: boolean
-}>()
+import { fetchRandomMemes, searchByText, searchByImageText, type MemeResponse } from '../api'
 
 const descriptionQuery = ref('')
 const selectedFile = ref<File | null>(null)
 const isDragging = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const searchBlockRef = ref<HTMLElement | null>(null)
-const scaledOut = ref(props.initialScaledOut || false)
+const scaledOut = ref(false)
 
 const handleFileSelect = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -99,7 +95,7 @@ const clearFile = () => {
 
 const emit = defineEmits<{
   (e: 'scaled-out-change', value: boolean): void
-  (e: 'search-results', results: import('../api').RandomMemeResponse[]): void
+  (e: 'search-results', results: import('../api').MemeResponse[]): void
 }>()
 
 const animateSearchBlockOut = () => {
@@ -134,22 +130,6 @@ const animateInIfScaledOut = () => {
   }
 }
 
-onMounted(() => {
-  if (scaledOut.value && searchBlockRef.value) {
-    // Set initial position to scaled out
-    gsap.set(searchBlockRef.value, {
-      scale: 0,
-      y: '-100vh'
-    })
-  }
-})
-
-watch(() => props.initialScaledOut, (newValue) => {
-  if (newValue !== undefined) {
-    scaledOut.value = newValue
-  }
-})
-
 defineExpose({
   animateInIfScaledOut,
   scaledOut
@@ -158,9 +138,10 @@ defineExpose({
 const handleSearch = async () => {
   const hasText = descriptionQuery.value.trim().length > 0
   const hasFile = selectedFile.value !== null
+  animateSearchBlockOut()
 
   try {
-    let results: RandomMemeResponse[] = []
+    let results: MemeResponse[] = []
     
     if (!hasText && !hasFile) {
       results = await fetchRandomMemes(10)
@@ -172,11 +153,8 @@ const handleSearch = async () => {
       clearFile()
     }
     
-    // Sort by score (highest first)
     results.sort((a, b) => b.score - a.score)
-    
     emit('search-results', results)
-    animateSearchBlockOut()
   } catch (error) {
     console.error('Search error:', error)
   }
@@ -185,10 +163,8 @@ const handleSearch = async () => {
 
 <style scoped>
 .search-block {
-  position: relative;
   z-index: 2;
-  background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+  background-color: var(--background-color);
   border: 2px solid var(--accent-color);
   border-radius: 8px;
   padding: 2rem;
