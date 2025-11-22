@@ -1,5 +1,5 @@
 <template>
-  <div class="search-block">
+  <div class="search-block" ref="searchBlockRef">
     <div class="search-field">
       <label for="description-search">Искать по описанию</label>
       <input 
@@ -49,13 +49,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { gsap } from 'gsap'
 import { fetchRandomMemes, searchByText, searchByImageText } from '../api'
+
+const props = defineProps<{
+  initialScaledOut?: boolean
+}>()
 
 const descriptionQuery = ref('')
 const selectedFile = ref<File | null>(null)
 const isDragging = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
+const searchBlockRef = ref<HTMLElement | null>(null)
+const scaledOut = ref(props.initialScaledOut || false)
 
 const handleFileSelect = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -90,6 +97,63 @@ const clearFile = () => {
   }
 }
 
+const emit = defineEmits<{
+  (e: 'scaled-out-change', value: boolean): void
+}>()
+
+const animateSearchBlockOut = () => {
+  if (!searchBlockRef.value) return
+  
+  scaledOut.value = true
+  emit('scaled-out-change', true)
+  gsap.to(searchBlockRef.value, {
+    scale: 0,
+    y: '-100vh',
+    duration: 0.6,
+    ease: 'power2.in'
+  })
+}
+
+const animateSearchBlockIn = () => {
+  if (!searchBlockRef.value) return
+  
+  gsap.to(searchBlockRef.value, {
+    scale: 1,
+    y: 0,
+    duration: 0.6,
+    ease: 'power2.out'
+  })
+  scaledOut.value = false
+  emit('scaled-out-change', false)
+}
+
+const animateInIfScaledOut = () => {
+  if (scaledOut.value) {
+    animateSearchBlockIn()
+  }
+}
+
+onMounted(() => {
+  if (scaledOut.value && searchBlockRef.value) {
+    // Set initial position to scaled out
+    gsap.set(searchBlockRef.value, {
+      scale: 0,
+      y: '-100vh'
+    })
+  }
+})
+
+watch(() => props.initialScaledOut, (newValue) => {
+  if (newValue !== undefined) {
+    scaledOut.value = newValue
+  }
+})
+
+defineExpose({
+  animateInIfScaledOut,
+  scaledOut
+})
+
 const handleSearch = async () => {
   const hasText = descriptionQuery.value.trim().length > 0
   const hasFile = selectedFile.value !== null
@@ -97,12 +161,15 @@ const handleSearch = async () => {
   try {
     if (!hasText && !hasFile) {
       await fetchRandomMemes(10)
+      animateSearchBlockOut()
     } else if (hasText && !hasFile) {
       await searchByText(descriptionQuery.value.trim())
+      animateSearchBlockOut()
     } else if (hasFile) {
       const query = hasText ? descriptionQuery.value.trim() : ''
       await searchByImageText(query, selectedFile.value!)
       clearFile()
+      animateSearchBlockOut()
     }
   } catch (error) {
     console.error('Search error:', error)

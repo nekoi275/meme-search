@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import InitialScreen from './screens/InitialScreen.vue'
 import RandomMemeScreen from './screens/RandomMemeScreen.vue'
 import ResultScreen from './screens/ResultScreen.vue'
@@ -10,6 +10,8 @@ import { fetchRandomMemes, type RandomMemeResponse } from './api'
 const currentScreen = ref<'initial' | 'result' | 'search'>('initial')
 const resultUrl = ref<string>('')
 const isLoading = ref<boolean>(false)
+const resultScreenRef = ref<InstanceType<typeof ResultScreen> | null>(null)
+const searchBlockScaledOut = ref(false)
 
 const handleRandomResponse = (response: RandomMemeResponse[]): string | null => {
   if (response.length > 0) {
@@ -40,8 +42,16 @@ const handleRandomMeme = async () => {
   }
 }
 
-const handleSearch = () => {
+const handleSearch = async () => {
   currentScreen.value = 'search'
+  await nextTick()
+  if (resultScreenRef.value?.searchBlockRef && searchBlockScaledOut.value) {
+    resultScreenRef.value.searchBlockRef.animateInIfScaledOut()
+  }
+}
+
+const handleSearchBlockScaledOut = (scaledOut: boolean) => {
+  searchBlockScaledOut.value = scaledOut
 }
 
 const handleReturnToInitialScreen = () => {
@@ -63,7 +73,12 @@ const handleReturnToInitialScreen = () => {
     v-if="currentScreen === 'result'"
     :telegram-url="resultUrl" 
   />
-  <ResultScreen v-if="currentScreen === 'search'" />
+  <ResultScreen 
+    v-if="currentScreen === 'search'" 
+    ref="resultScreenRef" 
+    :initial-scaled-out="searchBlockScaledOut"
+    @search-block-scaled-out="handleSearchBlockScaledOut" 
+  />
 </template>
 
 <style scoped>
