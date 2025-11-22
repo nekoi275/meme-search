@@ -1,5 +1,5 @@
 <template>
-  <div class="result-screen">
+  <div class="search-screen">
     <SearchBlock
       class="search-block"
       ref="searchBlockRef" 
@@ -48,7 +48,7 @@ defineExpose({
 </script>
 
 <style scoped>
-.result-screen {
+.search-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -114,3 +114,4 @@ defineExpose({
   }
 }
 </style>
+

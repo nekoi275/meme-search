@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import ThemeToggle from "./ThemeToggle.vue";
 
 const props = defineProps<{
-  currentScreen?: "initial" | "result" | "search";
+  currentScreen?: "initial" | "randomMeme" | "search";
 }>();
 
 const emit = defineEmits<{
@@ -85,7 +85,7 @@ onMounted(() => {
         />
         <span>Случайный мем</span>
       </button>
-      <button v-if="props.currentScreen === 'result' || props.currentScreen === 'search'" @click="handleSearch">
+      <button v-if="props.currentScreen === 'randomMeme' || props.currentScreen === 'search'" @click="handleSearch">
         Начать поиск
       </button>
       <ThemeToggle />

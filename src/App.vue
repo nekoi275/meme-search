@@ -2,15 +2,15 @@
 import { ref, nextTick } from 'vue'
 import InitialScreen from './screens/InitialScreen.vue'
 import RandomMemeScreen from './screens/RandomMemeScreen.vue'
-import ResultScreen from './screens/ResultScreen.vue'
+import SearchScreen from './screens/SearchScreen.vue'
 import LoadingScreen from './screens/LoadingScreen.vue'
 import Header from './components/Header.vue'
 import { fetchRandomMemes, type MemeResponse } from './api'
 
-const currentScreen = ref<'initial' | 'result' | 'search'>('initial')
+const currentScreen = ref<'initial' | 'randomMeme' | 'search'>('initial')
 const resultUrl = ref<string>('')
 const isLoading = ref<boolean>(false)
-const resultScreenRef = ref<InstanceType<typeof ResultScreen> | null>(null)
+const searchScreenRef = ref<InstanceType<typeof SearchScreen> | null>(null)
 
 const handleRandomResponse = (response: MemeResponse[]): string | null => {
   if (response.length > 0) {
@@ -27,7 +27,7 @@ const handleRandomResponse = (response: MemeResponse[]): string | null => {
 
 const handleRandomMeme = async () => {
   isLoading.value = true
-  currentScreen.value = 'result'
+  currentScreen.value = 'randomMeme'
   try {
     const response = await fetchRandomMemes(1)
     const firstUrl = handleRandomResponse(response)
@@ -44,8 +44,8 @@ const handleRandomMeme = async () => {
 const handleSearchButtonClick = async () => {
   currentScreen.value = 'search'
   await nextTick()
-  if (resultScreenRef.value?.searchBlockRef) {
-    resultScreenRef.value.searchBlockRef.animateInIfScaledOut()
+  if (searchScreenRef.value?.searchBlockRef) {
+    searchScreenRef.value.searchBlockRef.animateInIfScaledOut()
   }
 }
 
@@ -65,12 +65,12 @@ const handleReturnToInitialScreen = () => {
   />
   <InitialScreen v-if="currentScreen === 'initial'" @search="handleSearchButtonClick" />
   <RandomMemeScreen 
-    v-if="currentScreen === 'result'"
+    v-if="currentScreen === 'randomMeme'"
     :telegram-url="resultUrl" 
   />
-  <ResultScreen 
+  <SearchScreen 
     v-if="currentScreen === 'search'" 
-    ref="resultScreenRef" 
+    ref="searchScreenRef" 
   />
 </template>
 
