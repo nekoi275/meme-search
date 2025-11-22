@@ -28,6 +28,15 @@
           @change="handleFileSelect"
           style="display: none"
         />
+        <button 
+          v-if="selectedFile"
+          class="clear-file-btn"
+          @click.stop="clearFile"
+          type="button"
+          aria-label="Clear selected file"
+        >
+          ×
+        </button>
         <div class="drop-zone-content">
           <p v-if="!selectedFile">Перетащите изображение сюда или нажмите для выбора</p>
           <p v-else class="file-name">{{ selectedFile.name }}</p>
@@ -41,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { fetchRandomMeme, searchByText, searchByImageText } from '../api'
+import { fetchRandomMemes, searchByText, searchByImageText } from '../api'
 
 const descriptionQuery = ref('')
 const selectedFile = ref<File | null>(null)
@@ -74,18 +83,26 @@ const triggerFileInput = () => {
   fileInputRef.value?.click()
 }
 
+const clearFile = () => {
+  selectedFile.value = null
+  if (fileInputRef.value) {
+    fileInputRef.value.value = ''
+  }
+}
+
 const handleSearch = async () => {
   const hasText = descriptionQuery.value.trim().length > 0
   const hasFile = selectedFile.value !== null
 
   try {
     if (!hasText && !hasFile) {
-      await fetchRandomMeme(10)
+      await fetchRandomMemes(10)
     } else if (hasText && !hasFile) {
       await searchByText(descriptionQuery.value.trim())
     } else if (hasFile) {
       const query = hasText ? descriptionQuery.value.trim() : ''
       await searchByImageText(query, selectedFile.value!)
+      clearFile()
     }
   } catch (error) {
     console.error('Search error:', error)
@@ -137,6 +154,7 @@ const handleSearch = async () => {
 }
 
 .file-drop-zone {
+  position: relative;
   min-height: 120px;
   border: 2px dashed var(--accent-color);
   border-radius: 8px;
@@ -173,6 +191,25 @@ const handleSearch = async () => {
 .file-name {
   color: var(--accent-color);
   font-weight: 500;
+}
+
+.clear-file-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--accent-color);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+  z-index: 10;
+}
+
+.clear-file-btn:hover {
+  background-color: rgba(255, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
