@@ -12,6 +12,7 @@ const resultUrl = ref<string>('')
 const isLoading = ref<boolean>(false)
 const resultScreenRef = ref<InstanceType<typeof ResultScreen> | null>(null)
 const searchBlockScaledOut = ref(false)
+const searchResults = ref<RandomMemeResponse[]>([])
 
 const handleRandomResponse = (response: RandomMemeResponse[]): string | null => {
   if (response.length > 0) {
@@ -57,6 +58,11 @@ const handleSearchBlockScaledOut = (scaledOut: boolean) => {
 const handleReturnToInitialScreen = () => {
   currentScreen.value = 'initial'
   resultUrl.value = ''
+  searchResults.value = []
+}
+
+const handleSearchResults = (results: RandomMemeResponse[]) => {
+  searchResults.value = results
 }
 </script>
 
@@ -77,7 +83,9 @@ const handleReturnToInitialScreen = () => {
     v-if="currentScreen === 'search'" 
     ref="resultScreenRef" 
     :initial-scaled-out="searchBlockScaledOut"
-    @search-block-scaled-out="handleSearchBlockScaledOut" 
+    :search-results="searchResults"
+    @search-block-scaled-out="handleSearchBlockScaledOut"
+    @search-results="handleSearchResults"
   />
 </template>
 

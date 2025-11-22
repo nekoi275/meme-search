@@ -24,7 +24,7 @@ export const fetchRandomMemes = async (n: number = 1): Promise<RandomMemeRespons
   return data
 }
 
-export const searchByText = async (q: string): Promise<string[]> => {
+export const searchByText = async (q: string): Promise<RandomMemeResponse[]> => {
   const encodedQuery = encodeURIComponent(q)
   const response = await fetch(`${API_URL}/search?q=${encodedQuery}&n=${SEARCH_RESULTS_COUNT}`, {
     method: 'GET',
@@ -38,10 +38,10 @@ export const searchByText = async (q: string): Promise<string[]> => {
   }
   
   const data = await response.json()
-  return Array.isArray(data) ? data.map((item: any) => item.url || item) : [data.url || data]
+  return Array.isArray(data) ? data : [data]
 }
 
-export const searchByImageText = async (q: string, image: File): Promise<string[]> => {
+export const searchByImageText = async (q: string, image: File): Promise<RandomMemeResponse[]> => {
   const formData = new FormData()
   formData.append('q', q)
   formData.append('n', SEARCH_RESULTS_COUNT.toString())
@@ -60,6 +60,6 @@ export const searchByImageText = async (q: string, image: File): Promise<string[
   }
   
   const data = await response.json()
-  return Array.isArray(data) ? data.map((item: any) => item.url || item) : [data.url || data]
+  return Array.isArray(data) ? data : [data]
 }
 

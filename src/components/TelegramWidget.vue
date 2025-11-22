@@ -43,14 +43,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="widget-container" ref="widgetContainer"></div>
+  <div ref="widgetContainer"></div>
 </template>
 
 <style scoped>
-.widget-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
 </style>
 

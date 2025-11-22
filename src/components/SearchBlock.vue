@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { gsap } from 'gsap'
-import { fetchRandomMemes, searchByText, searchByImageText } from '../api'
+import { fetchRandomMemes, searchByText, searchByImageText, type RandomMemeResponse } from '../api'
 
 const props = defineProps<{
   initialScaledOut?: boolean
@@ -99,6 +99,7 @@ const clearFile = () => {
 
 const emit = defineEmits<{
   (e: 'scaled-out-change', value: boolean): void
+  (e: 'search-results', results: import('../api').RandomMemeResponse[]): void
 }>()
 
 const animateSearchBlockOut = () => {
@@ -159,18 +160,23 @@ const handleSearch = async () => {
   const hasFile = selectedFile.value !== null
 
   try {
+    let results: RandomMemeResponse[] = []
+    
     if (!hasText && !hasFile) {
-      await fetchRandomMemes(10)
-      animateSearchBlockOut()
+      results = await fetchRandomMemes(10)
     } else if (hasText && !hasFile) {
-      await searchByText(descriptionQuery.value.trim())
-      animateSearchBlockOut()
+      results = await searchByText(descriptionQuery.value.trim())
     } else if (hasFile) {
       const query = hasText ? descriptionQuery.value.trim() : ''
-      await searchByImageText(query, selectedFile.value!)
+      results = await searchByImageText(query, selectedFile.value!)
       clearFile()
-      animateSearchBlockOut()
     }
+    
+    // Sort by score (highest first)
+    results.sort((a, b) => b.score - a.score)
+    
+    emit('search-results', results)
+    animateSearchBlockOut()
   } catch (error) {
     console.error('Search error:', error)
   }
