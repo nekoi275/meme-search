@@ -5,7 +5,7 @@
       ref="searchBlockRef" 
       @search-results="handleSearchResults"
     />
-    <div v-if="displayResults.length > 0" class="results-container">
+    <div v-show="displayResults.length > 0" class="results-container">
       <TelegramWidget 
         v-for="(url, index) in allUrls" 
         :key="`url-${index}`"
