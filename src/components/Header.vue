@@ -50,12 +50,6 @@ const stopSpin = () => {
     spinAnimation = null;
   }
 };
-
-onMounted(() => {
-  if (typeof gsap !== "undefined") {
-    console.log("GSAP loaded successfully");
-  }
-});
 </script>
 
 <template>
@@ -66,7 +60,7 @@ onMounted(() => {
         src="/src/assets/logo_M.webp"
         width="100"
         height="100"
-        alt="Логотип"
+        alt="Логотип поисковика мемов"
         class="logo"
         @click="handleReturnToInitialScreen"
       />
