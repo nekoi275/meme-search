@@ -1,4 +1,4 @@
-const API_URL = 'https://b7ywm2txkojn4qe4wtb6ivlo3e0wejwr.lambda-url.eu-west-1.on.aws'
+const API_URL = 'https://oanqzrps3ftgcm2mkp43y57sde0vsvjm.lambda-url.eu-west-1.on.aws'
 const SEARCH_RESULTS_COUNT = 10
 
 export interface MemeResponse {

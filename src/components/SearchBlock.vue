@@ -198,8 +198,7 @@ const handleSearch = async () => {
 }
 
 .search-field input[type="text"]:focus {
-  border-bottom: 8px solid var(--accent-color);
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--secondary-color);
 }
 
 .file-drop-zone {
@@ -216,13 +215,8 @@ const handleSearch = async () => {
   padding: 1rem;
 }
 
-.file-drop-zone:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-color);
-}
-
 .file-drop-zone.dragover {
-  background-color: rgba(222, 129, 216, 0.2);
+  background-color: var(--secondary-color);
   border-color: var(--accent-color);
   border-style: solid;
 }

@@ -116,8 +116,8 @@ const stopSpin = () => {
 }
 
 .random-icon {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   filter: invert(1);
   transition: filter 0.3s ease;
