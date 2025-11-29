@@ -8,6 +8,24 @@ export interface MemeResponse {
   urls: string[]
 }
 
+const prepareToSearch = (description?: string, text?: string, image?: File) => {
+  const formData = new FormData()
+  
+  if (description) {
+    formData.append('description', description.trim())
+  }
+  if (text) {
+    formData.append('text', text.trim())
+  }
+  if (image) {
+    formData.append('image', image)
+  }
+  
+  formData.append('n', SEARCH_RESULTS_COUNT.toString())
+  
+  return formData
+}
+
 export const fetchRandomMemes = async (n: number = 1): Promise<MemeResponse[]> => {
   const response = await fetch(`${API_URL}/random?n=${n}`, {
     method: 'GET',
@@ -24,28 +42,16 @@ export const fetchRandomMemes = async (n: number = 1): Promise<MemeResponse[]> =
   return data
 }
 
-export const searchByText = async (q: string): Promise<MemeResponse[]> => {
-  const encodedQuery = encodeURIComponent(q)
-  const response = await fetch(`${API_URL}/search?q=${encodedQuery}&n=${SEARCH_RESULTS_COUNT}`, {
-    method: 'GET',
-    headers: {
-      'accept': 'application/json'
-    }
-  })
+export const searchMemes = async (description?: string, text?: string, image?: File): Promise<MemeResponse[]> => {
+  const hasDescription = description && description.trim().length > 0
+  const hasText = text && text.trim().length > 0
+  const hasImage = image !== undefined && image !== null
   
-  if (!response.ok) {
-    throw new Error('Failed to search by text')
+  if (!hasDescription && !hasText && !hasImage) {
+    throw new Error('At least one search parameter is required')
   }
   
-  const data = await response.json()
-  return Array.isArray(data) ? data : [data]
-}
-
-export const searchByImageText = async (q: string, image: File): Promise<MemeResponse[]> => {
-  const formData = new FormData()
-  formData.append('q', q)
-  formData.append('n', SEARCH_RESULTS_COUNT.toString())
-  formData.append('image', image)
+  const formData = prepareToSearch(description, text, image)
   
   const response = await fetch(`${API_URL}/search`, {
     method: 'POST',
@@ -56,10 +62,9 @@ export const searchByImageText = async (q: string, image: File): Promise<MemeRes
   })
   
   if (!response.ok) {
-    throw new Error('Failed to search by image and text')
+    throw new Error('Failed to search memes')
   }
   
   const data = await response.json()
   return Array.isArray(data) ? data : [data]
 }
-

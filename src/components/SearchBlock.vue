@@ -1,40 +1,23 @@
 <template>
   <div class="search-block" ref="searchBlockRef">
     <div class="search-field">
-      <label for="description-search">Искать по описанию</label>
-      <input 
-        id="description-search"
-        type="text" 
-        v-model="descriptionQuery"
-        placeholder="Введите описание мема..."
-      />
+      <label for="description-search">Искать по описанию мема</label>
+      <input id="description-search" type="text" v-model="descriptionQuery" placeholder="Введите описание мема..." />
     </div>
-    
+
+    <div class="search-field">
+      <label for="text-search">Искать по тексту мема</label>
+      <input id="text-search" type="text" v-model="textQuery" placeholder="Введите текст из мема..." />
+    </div>
+
     <div class="search-field">
       <label for="image-search">Искать по картинке</label>
-      <div 
-        class="file-drop-zone"
-        :class="{ 'dragover': isDragging }"
-        @drop="handleDrop"
-        @dragover.prevent="isDragging = true"
-        @dragleave="isDragging = false"
-        @click="triggerFileInput"
-      >
-        <input 
-          id="image-search"
-          ref="fileInputRef"
-          type="file" 
-          accept="image/*"
-          @change="handleFileSelect"
-          style="display: none"
-        />
-        <button 
-          v-if="selectedFile"
-          class="clear-file-btn"
-          @click.stop="clearFile"
-          type="button"
-          aria-label="Clear selected file"
-        >
+      <div class="file-drop-zone" :class="{ 'dragover': isDragging }" @drop="handleDrop"
+        @dragover.prevent="isDragging = true" @dragleave="isDragging = false" @click="triggerFileInput">
+        <input id="image-search" ref="fileInputRef" type="file" accept="image/*" @change="handleFileSelect"
+          style="display: none" />
+        <button v-if="selectedFile" class="clear-file-btn" @click.stop="clearFile" type="button"
+          aria-label="Clear selected file">
           ×
         </button>
         <div class="drop-zone-content">
@@ -43,7 +26,7 @@
         </div>
       </div>
     </div>
-    
+
     <button @click="handleSearch" style="align-self: center;">Тык</button>
   </div>
 </template>
@@ -51,9 +34,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { gsap } from 'gsap'
-import { fetchRandomMemes, searchByText, searchByImageText, type MemeResponse } from '../api'
+import { fetchRandomMemes, searchMemes, type MemeResponse } from '../api'
 
 const descriptionQuery = ref('')
+const textQuery = ref('')
 const selectedFile = ref<File | null>(null)
 const isDragging = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
@@ -73,7 +57,7 @@ const handleFileSelect = (event: Event) => {
 const handleDrop = (event: DragEvent) => {
   event.preventDefault()
   isDragging.value = false
-  
+
   if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
     const file = event.dataTransfer.files[0]
     if (file && file.type.startsWith('image/')) {
@@ -93,6 +77,12 @@ const clearFile = () => {
   }
 }
 
+const clearInputs = () => {
+  clearFile()
+  descriptionQuery.value = ''
+  textQuery.value = ''
+}
+
 const emit = defineEmits<{
   (e: 'scaled-out-change', value: boolean): void
   (e: 'search-results', results: import('../api').MemeResponse[]): void
@@ -100,7 +90,7 @@ const emit = defineEmits<{
 
 const animateSearchBlockOut = () => {
   if (!searchBlockRef.value) return
-  
+
   scaledOut.value = true
   emit('scaled-out-change', true)
   gsap.to(searchBlockRef.value, {
@@ -113,7 +103,7 @@ const animateSearchBlockOut = () => {
 
 const animateSearchBlockIn = () => {
   if (!searchBlockRef.value) return
-  
+
   gsap.to(searchBlockRef.value, {
     scale: 1,
     y: 0,
@@ -136,23 +126,25 @@ defineExpose({
 })
 
 const handleSearch = async () => {
-  const hasText = descriptionQuery.value.trim().length > 0
+  const hasDescription = descriptionQuery.value.trim().length > 0
+  const hasText = textQuery.value.trim().length > 0
   const hasFile = selectedFile.value !== null
   animateSearchBlockOut()
 
   try {
     let results: MemeResponse[] = []
-    
-    if (!hasText && !hasFile) {
+
+    if (!hasDescription && !hasText && !hasFile) {
       results = await fetchRandomMemes(10)
-    } else if (hasText && !hasFile) {
-      results = await searchByText(descriptionQuery.value.trim())
-    } else if (hasFile) {
-      const query = hasText ? descriptionQuery.value.trim() : ''
-      results = await searchByImageText(query, selectedFile.value!)
-      clearFile()
+    } else {
+      results = await searchMemes(
+        hasDescription ? descriptionQuery.value.trim() : undefined,
+        hasText ? textQuery.value.trim() : undefined,
+        hasFile ? selectedFile.value! : undefined
+      )
+      clearInputs()
     }
-    
+
     results.sort((a, b) => b.score - a.score)
     emit('search-results', results)
   } catch (error) {
@@ -240,19 +232,18 @@ const handleSearch = async () => {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid var(--accent-color);
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-  text-align: center;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0;
   z-index: 10;
 }
 
+.clear-file-btn::after {
+  content: none;
+}
+
 .clear-file-btn:hover {
-  background-color: rgba(255, 0, 0, 0.3);
+  background-color: rgb(210, 135, 135);
 }
 
 @media (max-width: 768px) {
@@ -260,11 +251,11 @@ const handleSearch = async () => {
     padding: 1.5rem;
     width: 95%;
   }
-  
+
   .search-field label {
     font-size: 1rem;
   }
-  
+
   .file-drop-zone {
     min-height: 100px;
   }
@@ -274,18 +265,17 @@ const handleSearch = async () => {
   .search-block {
     padding: 1rem;
   }
-  
+
   .search-field label {
     font-size: 0.9rem;
   }
-  
+
   .file-drop-zone {
     min-height: 80px;
   }
-  
+
   .drop-zone-content p {
     font-size: 0.9rem;
   }
 }
 </style>
-
