@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { gsap } from "gsap";
 import ThemeToggle from "./ThemeToggle.vue";
 
@@ -55,28 +55,13 @@ const stopSpin = () => {
 <template>
   <header class="header">
     <div class="header-content">
-      <img
-        srcset="/src/assets/logo_S.webp 1x, /src/assets/logo_M.webp 2x, /src/assets/logo_L.webp 3x"
-        src="/src/assets/logo_M.webp"
-        width="100"
-        height="100"
-        alt="Логотип поисковика мемов"
-        class="logo"
-        @click="handleReturnToInitialScreen"
-      />
-      <button
-        @click="handleRandomMeme"
-        @mouseenter="startSpin"
-        @mouseleave="stopSpin"
-        class="random-meme-btn"
-      >
-        <img
-          ref="randomIconRef"
+      <img srcset="/src/assets/logo_S.webp 1x, /src/assets/logo_M.webp 2x, /src/assets/logo_L.webp 3x"
+        src="/src/assets/logo_M.webp" width="100" height="100" alt="Логотип поисковика мемов" class="logo"
+        @click="handleReturnToInitialScreen" />
+      <button @click="handleRandomMeme" @mouseenter="startSpin" @mouseleave="stopSpin" class="random-meme-btn">
+        <img ref="randomIconRef"
           srcset="/src/assets/random_S.png 1x, /src/assets/random_M.png 2x, /src/assets/random_L.png 3x"
-          src="/src/assets/random_M.png"
-          alt="Случайный мем"
-          class="random-icon"
-        />
+          src="/src/assets/random_M.png" alt="Случайный мем" class="random-icon" />
         <span>Случайный мем</span>
       </button>
       <button v-if="props.currentScreen === 'randomMeme' || props.currentScreen === 'search'" @click="handleSearch">
@@ -174,10 +159,22 @@ const stopSpin = () => {
     height: 20px;
   }
 }
+
+@media (prefers-color-scheme: light) {
+  .random-icon {
+    filter: invert(0);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .random-icon {
+    filter: invert(1);
+  }
+}
 </style>
 
 <style>
-:root:not(.light-theme) .random-icon {
+.dark-theme .random-icon {
   filter: invert(1);
 }
 

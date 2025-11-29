@@ -6,6 +6,24 @@
   font-display: swap;
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: #CFF7FF;
+    --text-color: #1a1a2e;
+    --accent-color: #d741c6;
+    --secondary-color: #FDDDC1;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #09434f;
+    --text-color: #f8f9fa;
+    --accent-color: #de81d8;
+    --secondary-color: #413e3a;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -22,10 +40,6 @@
 
   color-scheme: light dark;
   
-  --background-color: #09434f;
-  --text-color: #f8f9fa;
-  --accent-color: #de81d8;
-  --secondary-color: #413e3a;
   --black: #2a2a2a;
   --white: #f5f5dc;
 
@@ -44,6 +58,13 @@
   --accent-color: #d741c6;
   --secondary-color: #FDDDC1;
 }
+
+.dark-theme {
+  --background-color: #09434f;
+  --text-color: #f8f9fa;
+  --accent-color: #de81d8;
+  --secondary-color: #413e3a;
+} 
 
 button {
   background-color: transparent;

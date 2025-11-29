@@ -1,50 +1,59 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 
-const isDarkTheme = ref(true)
+const isDarkTheme = ref(window.matchMedia('(prefers-color-scheme: dark)').matches)
 const cordRef = ref<HTMLElement>()
 const pullRef = ref<HTMLElement>()
 const lampRef = ref<HTMLElement>()
 
 let tl: gsap.core.Timeline | null = null
 
-const toggleTheme = () => {
-  isDarkTheme.value = !isDarkTheme.value
-  document.documentElement.classList.toggle('light-theme', !isDarkTheme.value)
-  localStorage.setItem('theme', isDarkTheme.value ? 'dark' : 'light')
-  
+const playThemeToggleAnimation = () => {
   if (tl) tl.kill()
   if (!cordRef.value || !pullRef.value) return
-  
+
   tl = gsap.timeline()
-  
+
   tl.to(cordRef.value, {
     height: '120px',
     duration: 0.2,
     ease: 'power2.out'
   })
-  .to(pullRef.value, {
-    top: '160px',
-    duration: 0.2,
-    ease: 'power2.out'
-  }, 0)
-  .to(cordRef.value, {
-    height: '80px',
-    duration: 0.3,
-    ease: 'elastic.out(1, 0.5)'
-  })
-  .to(pullRef.value, {
-    top: '120px',
-    duration: 0.3,
-    ease: 'elastic.out(1, 0.5)'
-  }, '-=0.3')
+    .to(pullRef.value, {
+      top: '160px',
+      duration: 0.2,
+      ease: 'power2.out'
+    }, 0)
+    .to(cordRef.value, {
+      height: '80px',
+      duration: 0.3,
+      ease: 'elastic.out(1, 0.5)'
+    })
+    .to(pullRef.value, {
+      top: '120px',
+      duration: 0.3,
+      ease: 'elastic.out(1, 0.5)'
+    }, '-=0.3')
+}
+
+const toggleTheme = () => {
+  isDarkTheme.value = !isDarkTheme.value
+  if (isDarkTheme.value) {
+    document.documentElement.classList.remove('light-theme')
+    document.documentElement.classList.add('dark-theme')
+  } else {
+    document.documentElement.classList.remove('dark-theme')
+    document.documentElement.classList.add('light-theme')
+  }
+
+  playThemeToggleAnimation()
 }
 
 const handleMouseEnter = () => {
   if (tl) tl.kill()
   if (!cordRef.value || !pullRef.value) return
-  
+
   gsap.to(cordRef.value, {
     height: '90px',
     duration: 0.3,
@@ -60,7 +69,7 @@ const handleMouseEnter = () => {
 const handleMouseLeave = () => {
   if (tl) tl.kill()
   if (!cordRef.value || !pullRef.value) return
-  
+
   gsap.to(cordRef.value, {
     height: '80px',
     duration: 0.3,
@@ -73,18 +82,6 @@ const handleMouseLeave = () => {
   })
 }
 
-onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme) {
-    isDarkTheme.value = savedTheme === 'dark'
-    document.documentElement.classList.toggle('light-theme', !isDarkTheme.value)
-  } else { 
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    isDarkTheme.value = prefersDark
-    document.documentElement.classList.toggle('light-theme', !isDarkTheme.value)
-  }
-})
-
 onUnmounted(() => {
   if (tl) tl.kill()
 })
@@ -94,19 +91,16 @@ onUnmounted(() => {
   <div class="lamp-container" @click="toggleTheme" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <div ref="lampRef" class="lamp">
       <div class="lamp-bulb" :class="{ 'bulb-on': !isDarkTheme }">
-        <img 
-          :srcset="isDarkTheme 
-            ? '/src/assets/full-moon_S.png 1x, /src/assets/full-moon_M.png 2x, /src/assets/full-moon_L.png 3x'
-            : '/src/assets/sun_S.png 1x, /src/assets/sun_M.png 2x, /src/assets/sun_L.png 3x'"
+        <img :srcset="isDarkTheme
+          ? '/src/assets/full-moon_S.png 1x, /src/assets/full-moon_M.png 2x, /src/assets/full-moon_L.png 3x'
+          : '/src/assets/sun_S.png 1x, /src/assets/sun_M.png 2x, /src/assets/sun_L.png 3x'"
           :src="isDarkTheme ? '/src/assets/full-moon_M.png' : '/src/assets/sun_M.png'"
-          :alt="isDarkTheme ? 'Темная тема' : 'Светлая тема'"
-          class="theme-icon"
-        />
+          :alt="isDarkTheme ? 'Темная тема' : 'Светлая тема'" class="theme-icon" />
       </div>
     </div>
-    
+
     <div ref="cordRef" class="cord"></div>
-    
+
     <div ref="pullRef" class="pull-handle"></div>
   </div>
 </template>
