@@ -81,7 +81,6 @@ const stopSpin = () => {
   height: 7rem;
   background-color: var(--secondary-color);
   z-index: 1000;
-  border-bottom: 4px solid var(--black);
 }
 
 .header-content {
@@ -176,6 +175,14 @@ const stopSpin = () => {
 <style>
 .dark-theme .random-icon {
   filter: invert(1);
+}
+
+.dark-theme .header {
+  border-bottom: 2px solid var(--white);
+}
+
+.light-theme .header {
+  border-bottom: 2px solid var(--black);
 }
 
 .light-theme .random-icon {
