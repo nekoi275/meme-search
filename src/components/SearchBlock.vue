@@ -86,6 +86,7 @@ const clearInputs = () => {
 const emit = defineEmits<{
   (e: 'scaled-out-change', value: boolean): void
   (e: 'search-results', results: import('../api').MemeResponse[]): void
+  (e: 'is-loading', value: boolean): void
 }>()
 
 const animateSearchBlockOut = () => {
@@ -130,6 +131,7 @@ const handleSearch = async () => {
   const hasText = textQuery.value.trim().length > 0
   const hasFile = selectedFile.value !== null
   animateSearchBlockOut()
+  emit('is-loading', true)
 
   try {
     let results: MemeResponse[] = []
@@ -147,8 +149,10 @@ const handleSearch = async () => {
 
     results.sort((a, b) => b.score - a.score)
     emit('search-results', results)
+    emit('is-loading', false)
   } catch (error) {
     console.error('Search error:', error)
+    emit('is-loading', false)
   }
 }
 </script>

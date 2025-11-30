@@ -25,8 +25,12 @@ const handleRandomResponse = (response: MemeResponse[]): string | null => {
   return null
 }
 
+const setIsLoading = (value: boolean) => {
+  isLoading.value = value
+}
+
 const handleRandomMeme = async () => {
-  isLoading.value = true
+  setIsLoading(true)
   currentScreen.value = 'randomMeme'
   try {
     const response = await fetchRandomMemes(1)
@@ -37,7 +41,7 @@ const handleRandomMeme = async () => {
   } catch (error) {
     console.error('Error fetching random meme:', error)
   } finally {
-    isLoading.value = false
+    setIsLoading(false)
   }
 }
 
@@ -56,23 +60,12 @@ const handleReturnToInitialScreen = () => {
 </script>
 
 <template>
-  <LoadingScreen v-if="isLoading" />
-  <Header 
-    :current-screen="currentScreen"
-    @random-meme="handleRandomMeme"
-    @return-to-initial="handleReturnToInitialScreen"
-    @search="handleSearchButtonClick"
-  />
+  <LoadingScreen v-show="isLoading" />
+  <Header :current-screen="currentScreen" @random-meme="handleRandomMeme"
+    @return-to-initial="handleReturnToInitialScreen" @search="handleSearchButtonClick" />
   <InitialScreen v-if="currentScreen === 'initial'" @search="handleSearchButtonClick" />
-  <RandomMemeScreen 
-    v-if="currentScreen === 'randomMeme'"
-    :telegram-url="resultUrl" 
-  />
-  <SearchScreen 
-    v-if="currentScreen === 'search'" 
-    ref="searchScreenRef" 
-  />
+  <RandomMemeScreen v-if="currentScreen === 'randomMeme'" :telegram-url="resultUrl" />
+  <SearchScreen @is-loading="setIsLoading" v-if="currentScreen === 'search'" ref="searchScreenRef" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

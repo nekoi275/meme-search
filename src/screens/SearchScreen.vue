@@ -1,16 +1,9 @@
 <template>
   <div class="search-screen">
-    <SearchBlock
-      class="search-block"
-      ref="searchBlockRef" 
-      @search-results="handleSearchResults"
-    />
+    <SearchBlock class="search-block" ref="searchBlockRef" @search-results="handleSearchResults"
+      @is-loading="$emit('is-loading', $event)" />
     <div v-show="displayResults.length > 0" class="results-container">
-      <TelegramWidget 
-        v-for="(url, index) in allUrls" 
-        :key="`url-${index}`"
-        :telegram-url="url"
-      />
+      <TelegramWidget v-for="(url, index) in allUrls" :key="`url-${index}`" :telegram-url="url" />
     </div>
   </div>
 </template>
@@ -20,6 +13,10 @@ import { ref, computed } from 'vue'
 import SearchBlock from '../components/SearchBlock.vue'
 import TelegramWidget from '../components/TelegramWidget.vue'
 import type { MemeResponse } from '../api'
+
+const emit = defineEmits<{
+  (e: 'is-loading', value: boolean): void
+}>()
 
 const searchBlockRef = ref<InstanceType<typeof SearchBlock> | null>(null)
 const searchResults = ref<MemeResponse[]>([])
@@ -70,7 +67,7 @@ defineExpose({
   max-width: 1200px;
 }
 
-.results-container > * {
+.results-container>* {
   break-inside: avoid;
   margin-bottom: 2rem;
   display: inline-block;
@@ -96,8 +93,8 @@ defineExpose({
     column-count: 2;
     column-gap: 1.5rem;
   }
-  
-  .results-container > * {
+
+  .results-container>* {
     margin-bottom: 1.5rem;
   }
 }
@@ -108,10 +105,9 @@ defineExpose({
     padding: 0.5rem;
     column-gap: 1rem;
   }
-  
-  .results-container > * {
+
+  .results-container>* {
     margin-bottom: 1rem;
   }
 }
 </style>
-
