@@ -55,9 +55,10 @@ const stopSpin = () => {
 <template>
   <header class="header">
     <div class="header-content">
-      <img srcset="/src/assets/logo_S.webp 1x, /src/assets/logo_M.webp 2x, /src/assets/logo_L.webp 3x"
-        src="/src/assets/logo_M.webp" width="100" height="100" alt="Логотип поисковика мемов" class="logo"
-        @click="handleReturnToInitialScreen" />
+      <div class="logo" @click="handleReturnToInitialScreen">
+        <img src="/src/assets/logo.svg" alt="" class="logo-svg" />
+        <img src="/src/assets/logo2.webp" alt="Логотип поисковика мемов" class="logo-webp" />
+      </div>
       <button @click="handleRandomMeme" @mouseenter="startSpin" @mouseleave="stopSpin" class="random-meme-btn">
         <img ref="randomIconRef"
           srcset="/src/assets/random_S.png 1x, /src/assets/random_M.png 2x, /src/assets/random_L.png 3x"
@@ -108,9 +109,28 @@ const stopSpin = () => {
 }
 
 .logo {
+  position: relative;
   width: 100px;
   height: 100px;
   cursor: pointer;
+}
+
+.logo-webp {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+}
+
+.logo-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
@@ -163,10 +183,18 @@ const stopSpin = () => {
   .random-icon {
     filter: invert(0);
   }
+
+  .logo-svg {
+    filter: invert(0);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   .random-icon {
+    filter: invert(1);
+  }
+
+  .logo-svg {
     filter: invert(1);
   }
 }
@@ -178,6 +206,14 @@ const stopSpin = () => {
 }
 
 .light-theme .random-icon {
+  filter: invert(0);
+}
+
+.dark-theme .logo-svg {
+  filter: invert(1);
+}
+
+.light-theme .logo-svg {
   filter: invert(0);
 }
 </style>
