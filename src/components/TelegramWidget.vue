@@ -24,7 +24,6 @@ const loadTelegramWidget = () => {
   script.async = true;
   script.src = "https://telegram.org/js/telegram-widget.js?22";
   script.setAttribute("data-telegram-post", postId);
-  script.setAttribute("data-width", "100%");
 
   widgetContainer.value.appendChild(script);
 };
@@ -46,6 +45,4 @@ onMounted(() => {
   <div ref="widgetContainer"></div>
 </template>
 
-<style scoped>
-</style>
-
+<style scoped></style>

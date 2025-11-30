@@ -16,6 +16,7 @@ defineProps<{
 .random-meme-screen {
   background-color: var(--background-color);
   padding-top: 8rem;
+  display: flex;
+  justify-content: center;
 }
 </style>
-
