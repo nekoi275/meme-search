@@ -62,7 +62,7 @@ const stopSpin = () => {
         <img ref="randomIconRef"
           srcset="/src/assets/random_S.png 1x, /src/assets/random_M.png 2x, /src/assets/random_L.png 3x"
           src="/src/assets/random_M.png" alt="Случайный мем" class="random-icon" />
-        <span>Случайный мем</span>
+        <span class="btn-label">Случайный мем</span>
       </button>
       <button v-if="props.currentScreen === 'randomMeme' || props.currentScreen === 'search'" @click="handleSearch">
         Начать поиск
@@ -120,12 +120,12 @@ const stopSpin = () => {
   }
 
   .random-meme-btn {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
     font-size: 0.9rem;
   }
 
   button {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
     font-size: 0.9rem;
   }
 

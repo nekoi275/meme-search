@@ -51,9 +51,13 @@ const initializeMemes = () => {
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
 
+  const isMobile = screenWidth < 768
+  const minSize = isMobile ? 60 : 100
+  const maxSize = isMobile ? 150 : 250
+
   // Spawn memes
   memes.value = Array.from({ length: 10 }, () => {
-    const width = Math.random() * (250 - 100) + 100
+    const width = Math.random() * (maxSize - minSize) + minSize
     const height = width
 
     const side = Math.floor(Math.random() * 4)
