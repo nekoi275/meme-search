@@ -77,7 +77,7 @@ defineExpose({
 
 .search-block {
   position: absolute;
-  top: 10rem;
+  top: 8rem;
   left: 50%;
   transform: translateX(-50%);
 }

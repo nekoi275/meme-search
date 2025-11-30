@@ -21,7 +21,8 @@
           ×
         </button>
         <div class="drop-zone-content">
-          <p v-if="!selectedFile">Перетащите изображение сюда или нажмите для выбора</p>
+          <p v-if="errorMessage">{{ errorMessage }}</p>
+          <p v-else-if="!selectedFile">Перетащите картинку сюда или нажмите для выбора</p>
           <p v-else class="file-name">{{ selectedFile.name }}</p>
         </div>
       </div>
@@ -39,17 +40,36 @@ import { fetchRandomMemes, searchMemes, type MemeResponse } from '../api'
 const descriptionQuery = ref('')
 const textQuery = ref('')
 const selectedFile = ref<File | null>(null)
+const errorMessage = ref('')
 const isDragging = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const searchBlockRef = ref<HTMLElement | null>(null)
 const scaledOut = ref(false)
+
+const validateFile = (file: File) => {
+  const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
+  const extension = file.name.split('.').pop()?.toLowerCase()
+
+  if (extension && allowedExtensions.includes(extension)) {
+    errorMessage.value = ''
+    return true
+  }
+
+  errorMessage.value = 'Только jpg, png и webp'
+  return false
+}
 
 const handleFileSelect = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
     const file = target.files[0]
     if (file) {
-      selectedFile.value = file
+      if (validateFile(file)) {
+        selectedFile.value = file
+      } else {
+        selectedFile.value = null
+        target.value = ''
+      }
     }
   }
 }
@@ -60,8 +80,12 @@ const handleDrop = (event: DragEvent) => {
 
   if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
     const file = event.dataTransfer.files[0]
-    if (file && file.type.startsWith('image/')) {
-      selectedFile.value = file
+    if (file) {
+      if (validateFile(file)) {
+        selectedFile.value = file
+      } else {
+        selectedFile.value = null
+      }
     }
   }
 }
@@ -72,6 +96,7 @@ const triggerFileInput = () => {
 
 const clearFile = () => {
   selectedFile.value = null
+  errorMessage.value = ''
   if (fileInputRef.value) {
     fileInputRef.value.value = ''
   }

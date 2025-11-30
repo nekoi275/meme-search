@@ -177,14 +177,6 @@ const stopSpin = () => {
   filter: invert(1);
 }
 
-.dark-theme .header {
-  border-bottom: 2px solid var(--white);
-}
-
-.light-theme .header {
-  border-bottom: 2px solid var(--black);
-}
-
 .light-theme .random-icon {
   filter: invert(0);
 }
