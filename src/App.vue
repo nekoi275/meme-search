@@ -50,6 +50,7 @@ const handleSearchButtonClick = async () => {
   await nextTick()
   if (searchScreenRef.value?.searchBlockRef) {
     searchScreenRef.value.searchBlockRef.animateInIfScaledOut()
+    searchScreenRef.value.searchResults = [];
   }
 }
 

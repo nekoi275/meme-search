@@ -40,7 +40,8 @@ const handleSearchResults = (results: MemeResponse[]) => {
 }
 
 defineExpose({
-  searchBlockRef
+  searchBlockRef,
+  searchResults
 })
 </script>
 
