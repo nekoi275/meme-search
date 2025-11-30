@@ -36,10 +36,10 @@ const memeRefs = ref<(HTMLElement | null)[]>([])
 const memes = ref<MemeData[]>([])
 
 // Physics constants
-const FRICTION = 0.998 // Velocity multiplier per frame (simulates air resistance)
-const BOUNCE_DAMPING = 0.8 // Energy loss on bounce
-const MIN_SPEED = 0.5 // Minimum speed to keep moving
-const MAX_SPEED = 15 // Cap max speed to prevent glitching
+const FRICTION = 1 // Velocity multiplier per frame (simulates air resistance)
+const BOUNCE_DAMPING = 0.9 // Energy loss on bounce
+const MIN_SPEED = 0.1 // Minimum speed to keep moving
+const MAX_SPEED = 10 // Cap max speed to prevent glitching
 const LAUNCH_MULTIPLIER = 1.5 // Boost throw velocity slightly
 
 const initializeMemes = () => {
@@ -48,6 +48,12 @@ const initializeMemes = () => {
     console.warn('No meme images found')
     return
   }
+
+  for (let i = memeImagePaths.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [memeImagePaths[i], memeImagePaths[j]] = [memeImagePaths[j], memeImagePaths[i]];
+  }
+
   const screenWidth = window.innerWidth
   const screenHeight = window.innerHeight
 
@@ -55,8 +61,7 @@ const initializeMemes = () => {
   const minSize = isMobile ? 60 : 100
   const maxSize = isMobile ? 150 : 250
 
-  // Spawn memes
-  memes.value = Array.from({ length: 10 }, () => {
+  memes.value = Array.from({ length: 10 }, (_, index) => {
     const width = Math.random() * (maxSize - minSize) + minSize
     const height = width
 
@@ -85,15 +90,14 @@ const initializeMemes = () => {
         break
     }
 
-    // Target a random point inside the central area of the screen to ensure they enter
     const targetX = screenWidth * 0.2 + Math.random() * (screenWidth * 0.6)
     const targetY = screenHeight * 0.2 + Math.random() * (screenHeight * 0.6)
 
     const angle = Math.atan2(targetY - startY, targetX - startX)
-    const initialSpeed = Math.random() * 2 + 2 // Initial spawn speed
+    const initialSpeed = Math.random() * 3 + 3
 
     return {
-      src: memeImagePaths[Math.floor(Math.random() * memeImagePaths.length)]!,
+      src: memeImagePaths[index % memeImagePaths.length]!,
       width,
       height,
       rotation: Math.random() * 360,
