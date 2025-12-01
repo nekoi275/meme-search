@@ -1,10 +1,11 @@
 <template>
   <div class="initial-screen">
     <AnimatedMemesBg />
-    
+
     <div class="content">
       <h1 class="main-title">Мемы для важных переговоров. Найдем за вас.</h1>
-      <h3 class="subtitle">Качество ваших переговоров зависит от скорости мем-реакции. Мы ускоряем её. Система найдет нужный мем по описанию.</h3>
+      <h3 class="subtitle">Качество ваших переговоров зависит от скорости мем-реакции. Мы ускоряем её. Система найдет
+        нужный мем по описанию.</h3>
       <button @click="handleSearch">Начать поиск</button>
     </div>
   </div>
@@ -25,6 +26,7 @@ const handleSearch = () => {
 <style scoped>
 .initial-screen {
   height: 100vh;
+  padding-top: 7rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,11 +69,11 @@ const handleSearch = () => {
   .main-title {
     font-size: 2.5rem;
   }
-  
+
   .subtitle {
     font-size: 1.2rem;
   }
-  
+
   .content {
     padding: 1.5rem;
     margin: 1rem;
@@ -82,11 +84,11 @@ const handleSearch = () => {
   .main-title {
     font-size: 2rem;
   }
-  
+
   .subtitle {
     font-size: 1rem;
   }
-  
+
   .content {
     padding: 1rem;
   }

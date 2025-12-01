@@ -5,7 +5,7 @@
                 Сайт сделан <a href="https://nekoi.me/" target="_blank" rel="noopener noreferrer">Nekoi</a> в {{
                     currentYear }} г.
             </p>
-            <a href="https://t.me/addlist/A18Z_i8bRwQ0YWMy" target="_blank" rel="noopener noreferrer"
+            <a href="https://t.me/addlist/O_0_vO0DrBs3NTdi" target="_blank" rel="noopener noreferrer"
                 class="telegram-link">
                 <img srcset="/src/assets/telegram_s.png 1x, /src/assets/telegram_m.png 2x, /src/assets/telegram_l.png 3x"
                     src="/src/assets/telegram_m.png" alt="Наши каналы в телеграмме" class="telegram-icon" />
@@ -22,9 +22,8 @@ const currentYear = computed(() => new Date().getFullYear());
 
 <style scoped>
 .footer {
-    background-color: var(--secondary-color);
-    padding: 1rem;
-    text-align: center;
+    background-color: var(--footer-color);
+    padding: 0.5rem;
 }
 
 .footer-content {
@@ -61,8 +60,8 @@ const currentYear = computed(() => new Date().getFullYear());
 }
 
 .telegram-icon {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
 }
 

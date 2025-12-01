@@ -11,7 +11,8 @@
     --background-color: #CFF7FF;
     --text-color: #1a1a2e;
     --accent-color: #d741c6;
-    --secondary-color: #FDDDC1;
+  --secondary-color: #c1eef7;
+  --footer-color: #B7D2C8;
   }
 }
 
@@ -21,6 +22,7 @@
     --text-color: #f8f9fa;
     --accent-color: #de81d8;
     --secondary-color: #09434f;
+  --footer-color: #05252c;
   }
 }
 
@@ -53,10 +55,11 @@
 }
 
 .light-theme {
-  --background-color: #CFF7FF;
+  --background-color: #d5f1e3;
   --text-color: #1a1a2e;
   --accent-color: #d741c6;
-  --secondary-color: #FDDDC1;
+  --secondary-color: #c1eef7;
+  --footer-color: #B7D2C8;
 }
 
 .dark-theme {
@@ -64,6 +67,7 @@
   --text-color: #f8f9fa;
   --accent-color: #de81d8;
   --secondary-color: #09434f;
+  --footer-color: #05252c;
 } 
 
 button {
