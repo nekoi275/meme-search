@@ -6,6 +6,7 @@ import SearchScreen from './screens/SearchScreen.vue'
 import LoadingScreen from './screens/LoadingScreen.vue'
 import Header from './components/Header.vue'
 import { fetchRandomMemes, type MemeResponse } from './api'
+import Footer from './components/Footer.vue'
 
 const currentScreen = ref<'initial' | 'randomMeme' | 'search'>('initial')
 const resultUrl = ref<string>('')
@@ -61,12 +62,27 @@ const handleReturnToInitialScreen = () => {
 </script>
 
 <template>
-  <LoadingScreen v-show="isLoading" />
-  <Header :current-screen="currentScreen" @random-meme="handleRandomMeme"
-    @return-to-initial="handleReturnToInitialScreen" @search="handleSearchButtonClick" />
-  <InitialScreen v-if="currentScreen === 'initial'" @search="handleSearchButtonClick" />
-  <RandomMemeScreen v-if="currentScreen === 'randomMeme'" :telegram-url="resultUrl" />
-  <SearchScreen @is-loading="setIsLoading" v-if="currentScreen === 'search'" ref="searchScreenRef" />
+  <div class="app-container">
+    <LoadingScreen v-show="isLoading" />
+    <Header :current-screen="currentScreen" @random-meme="handleRandomMeme"
+      @return-to-initial="handleReturnToInitialScreen" @search="handleSearchButtonClick" />
+    <main class="main-content">
+      <InitialScreen v-if="currentScreen === 'initial'" @search="handleSearchButtonClick" />
+      <RandomMemeScreen v-if="currentScreen === 'randomMeme'" :telegram-url="resultUrl" />
+      <SearchScreen @is-loading="setIsLoading" v-if="currentScreen === 'search'" ref="searchScreenRef" />
+    </main>
+    <Footer />
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}
+</style>
