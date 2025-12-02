@@ -25,7 +25,7 @@ const handleSearch = () => {
 
 <style scoped>
 .initial-screen {
-  height: 100vh;
+  height: 90vh;
   padding-top: 7rem;
   display: flex;
   align-items: center;

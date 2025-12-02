@@ -7,8 +7,7 @@
             </p>
             <a href="https://t.me/addlist/O_0_vO0DrBs3NTdi" target="_blank" rel="noopener noreferrer"
                 class="telegram-link">
-                <img srcset="/src/assets/telegram_s.png 1x, /src/assets/telegram_m.png 2x, /src/assets/telegram_l.png 3x"
-                    src="/src/assets/telegram_m.png" alt="Наши каналы в телеграмме" class="telegram-icon" />
+                <img src="/src/assets/telegram.svg" alt="Наши каналы в телеграмме" class="telegram-icon" />
             </a>
         </div>
     </footer>

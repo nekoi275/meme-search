@@ -61,8 +61,7 @@ const stopSpin = () => {
       </div>
       <button @click="handleRandomMeme" @mouseenter="startSpin" @mouseleave="stopSpin" class="random-meme-btn">
         <img ref="randomIconRef"
-          srcset="/src/assets/random_S.png 1x, /src/assets/random_M.png 2x, /src/assets/random_L.png 3x"
-          src="/src/assets/random_M.png" alt="Случайный мем" class="random-icon" />
+          src="/src/assets/random.svg" alt="Случайный мем" class="random-icon" />
         <span class="btn-label">Случайный мем</span>
       </button>
       <button v-if="props.currentScreen === 'randomMeme' || props.currentScreen === 'search'" @click="handleSearch">
