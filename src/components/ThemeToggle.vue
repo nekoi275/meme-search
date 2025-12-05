@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onUnmounted } from 'vue'
+import { ref, onUnmounted, onMounted } from 'vue'
 import { gsap } from 'gsap'
 import sunIcon from '../assets/sun.svg'
 import moonIcon from '../assets/full-moon.svg'
@@ -12,6 +12,13 @@ const lampRef = ref<HTMLElement>()
 let tl: gsap.core.Timeline | null = null
 const startY = ref(0)
 const isDragging = ref(false)
+
+onMounted(() => {
+  const preloadSun = new Image()
+  preloadSun.src = sunIcon
+  const preloadMoon = new Image()
+  preloadMoon.src = moonIcon
+})
 
 const switchThemeState = () => {
   isDarkTheme.value = !isDarkTheme.value
@@ -58,9 +65,14 @@ const toggleTheme = () => {
 }
 
 const startDrag = (event: MouseEvent | TouchEvent) => {
+  // Disable dragging on mobile devices (touch events)
+  if (event instanceof TouchEvent) {
+    return
+  }
+
   if (tl) tl.kill()
 
-  const clientY = window.TouchEvent && event instanceof TouchEvent ? event.touches?.[0]?.clientY : (event as MouseEvent).clientY
+  const clientY = (event as MouseEvent).clientY
   if (!clientY) return
 
   startY.value = clientY
@@ -68,12 +80,15 @@ const startDrag = (event: MouseEvent | TouchEvent) => {
 
   window.addEventListener('mousemove', onDrag)
   window.addEventListener('mouseup', endDrag)
-  window.addEventListener('touchmove', onDrag)
-  window.addEventListener('touchend', endDrag)
 }
 
 const onDrag = (event: MouseEvent | TouchEvent) => {
-  const clientY = window.TouchEvent && event instanceof TouchEvent ? event?.touches?.[0]?.clientY : (event as MouseEvent).clientY
+  // Only handle mouse events, not touch events
+  if (event instanceof TouchEvent) {
+    return
+  }
+
+  const clientY = (event as MouseEvent).clientY
   if (!clientY) return
 
   const deltaY = clientY - startY.value
@@ -129,8 +144,6 @@ onUnmounted(() => {
   if (tl) tl.kill()
   window.removeEventListener('mousemove', onDrag)
   window.removeEventListener('mouseup', endDrag)
-  window.removeEventListener('touchmove', onDrag)
-  window.removeEventListener('touchend', endDrag)
 })
 </script>
 
@@ -146,9 +159,9 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div ref="cordRef" class="cord" @mousedown="startDrag" @touchstart.passive="startDrag"></div>
+    <div ref="cordRef" class="cord" @mousedown="startDrag"></div>
 
-    <div ref="pullRef" class="pull-handle" @mousedown="startDrag" @touchstart.passive="startDrag"></div>
+    <div ref="pullRef" class="pull-handle" @mousedown="startDrag"></div>
   </div>
 </template>
 
@@ -247,5 +260,14 @@ onUnmounted(() => {
   height: 4px;
   background: var(--black);
   border-radius: 1px;
+}
+
+/* Disable dragging on mobile devices */
+@media (hover: none) and (pointer: coarse) {
+  .cord,
+  .pull-handle {
+    pointer-events: none;
+    cursor: default;
+  }
 }
 </style>
