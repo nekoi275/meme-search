@@ -56,11 +56,12 @@ const stopSpin = () => {
   <header class="header">
     <div class="header-content">
       <div class="logo" @click="handleReturnToInitialScreen">
-        <img src="/src/assets/logo.svg" alt="" class="logo-svg" />
-        <img src="/src/assets/logo2.webp" alt="Логотип поисковика мемов" class="logo-webp" />
+        <img width="100" height="100" src="/src/assets/logo.svg" alt="" class="logo-svg" />
+        <img width="100" height="100" src="/src/assets/logo2.webp" alt="Логотип поисковика мемов" class="logo-webp" />
       </div>
       <button @click="handleRandomMeme" @mouseenter="startSpin" @mouseleave="stopSpin" class="random-meme-btn">
         <img ref="randomIconRef"
+          width="40" height="40"
           src="/src/assets/random.svg" alt="Случайный мем" class="random-icon" />
         <span class="btn-label">Случайный мем</span>
       </button>
