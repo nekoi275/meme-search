@@ -3,7 +3,7 @@
     <SearchBlock class="search-block" ref="searchBlockRef" @search-results="handleSearchResults"
       @is-loading="$emit('is-loading', $event)" />
     <div v-show="displayResults.length > 0" class="results-container">
-      <TelegramWidget v-for="(url, index) in allUrls" :key="`url-${index}`" :telegram-url="url" />
+      <MemeResult v-for="meme in displayResults" :key="meme.id" :meme="meme" />
     </div>
   </div>
 </template>
@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import SearchBlock from '../components/SearchBlock.vue'
-import TelegramWidget from '../components/TelegramWidget.vue'
+import MemeResult from '../components/MemeResult.vue'
 import type { MemeResponse } from '../api'
 
 const emit = defineEmits<{
@@ -22,17 +22,7 @@ const searchBlockRef = ref<InstanceType<typeof SearchBlock> | null>(null)
 const searchResults = ref<MemeResponse[]>([])
 
 const displayResults = computed(() => {
-  return searchResults.value
-})
-
-const allUrls = computed(() => {
-  const urls: string[] = []
-  displayResults.value.forEach(result => {
-    if (result.urls && result.urls.length > 0) {
-      urls.push(...result.urls)
-    }
-  })
-  return urls
+  return searchResults.value.filter(meme => meme.urls && meme.urls.length > 0)
 })
 
 const handleSearchResults = (results: MemeResponse[]) => {
