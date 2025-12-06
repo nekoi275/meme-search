@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import ThemeToggle from "./ThemeToggle.vue";
 
 const props = defineProps<{
-  currentScreen?: "initial" | "randomMeme" | "search";
+  currentScreen?: "initial" | "randomMeme" | "search" | "error";
 }>();
 
 const emit = defineEmits<{

@@ -1,7 +1,7 @@
 <template>
   <div class="search-screen">
     <SearchBlock class="search-block" ref="searchBlockRef" @search-results="handleSearchResults"
-      @is-loading="$emit('is-loading', $event)" />
+      @is-loading="$emit('is-loading', $event)" @error="$emit('error')" />
     <div v-show="displayResults.length > 0" class="results-container">
       <MemeResult v-for="meme in displayResults" :key="meme.id" :meme="meme" />
     </div>
@@ -16,6 +16,7 @@ import type { MemeResponse } from '../api'
 
 const emit = defineEmits<{
   (e: 'is-loading', value: boolean): void
+  (e: 'error'): void
 }>()
 
 const searchBlockRef = ref<InstanceType<typeof SearchBlock> | null>(null)

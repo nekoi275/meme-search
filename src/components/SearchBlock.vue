@@ -112,6 +112,7 @@ const emit = defineEmits<{
   (e: 'scaled-out-change', value: boolean): void
   (e: 'search-results', results: import('../api').MemeResponse[]): void
   (e: 'is-loading', value: boolean): void
+  (e: 'error'): void
 }>()
 
 const animateSearchBlockOut = () => {
@@ -178,6 +179,7 @@ const handleSearch = async () => {
   } catch (error) {
     console.error('Search error:', error)
     emit('is-loading', false)
+    emit('error')
   }
 }
 </script>

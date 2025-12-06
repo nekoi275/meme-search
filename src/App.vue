@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, computed } from 'vue'
 import InitialScreen from './screens/InitialScreen.vue'
 import RandomMemeScreen from './screens/RandomMemeScreen.vue'
 import SearchScreen from './screens/SearchScreen.vue'
@@ -7,8 +7,9 @@ import LoadingScreen from './screens/LoadingScreen.vue'
 import Header from './components/Header.vue'
 import { fetchRandomMemes, type MemeResponse } from './api'
 import Footer from './components/Footer.vue'
-
-const currentScreen = ref<'initial' | 'randomMeme' | 'search'>('initial')
+import ErrorScreen from './screens/ErrorScreen.vue'
+const currentScreen = ref<'initial' | 'randomMeme' | 'search' | 'error'>('initial')
+const currentScreenValue = computed(() => currentScreen.value)
 const resultUrl = ref<string>('')
 const isLoading = ref<boolean>(false)
 const searchScreenRef = ref<InstanceType<typeof SearchScreen> | null>(null)
@@ -41,6 +42,7 @@ const handleRandomMeme = async () => {
     }
   } catch (error) {
     console.error('Error fetching random meme:', error)
+    currentScreen.value = 'error'
   } finally {
     setIsLoading(false)
   }
@@ -59,17 +61,26 @@ const handleReturnToInitialScreen = () => {
   currentScreen.value = 'initial'
   resultUrl.value = ''
 }
+
+const handleError = () => {
+  currentScreen.value = 'error'
+}
+
+const handleErrorSearch = () => {
+  currentScreen.value = 'search'
+}
 </script>
 
 <template>
   <div class="app-container">
     <LoadingScreen v-show="isLoading" />
-    <Header :current-screen="currentScreen" @random-meme="handleRandomMeme"
+    <Header :current-screen="currentScreenValue" @random-meme="handleRandomMeme"
       @return-to-initial="handleReturnToInitialScreen" @search="handleSearchButtonClick" />
     <main class="main-content">
       <InitialScreen v-if="currentScreen === 'initial'" @search="handleSearchButtonClick" />
       <RandomMemeScreen v-if="currentScreen === 'randomMeme'" :telegram-url="resultUrl" />
-      <SearchScreen @is-loading="setIsLoading" v-if="currentScreen === 'search'" ref="searchScreenRef" />
+      <SearchScreen @is-loading="setIsLoading" @error="handleError" v-if="currentScreen === 'search'" ref="searchScreenRef" />
+      <ErrorScreen v-if="currentScreen === 'error'" @search="handleErrorSearch" />
     </main>
     <Footer />
   </div>

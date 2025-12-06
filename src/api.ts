@@ -34,7 +34,7 @@ export const fetchRandomMemes = async (n: number = 1): Promise<MemeResponse[]> =
     }
   })
   
-  if (!response.ok) {
+  if (response.status !== 200) {
     throw new Error('Failed to fetch random meme')
   }
   
@@ -61,7 +61,7 @@ export const searchMemes = async (description?: string, text?: string, image?: F
     body: formData
   })
   
-  if (!response.ok) {
+  if (response.status !== 200) {
     throw new Error('Failed to search memes')
   }
   
