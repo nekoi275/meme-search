@@ -4,7 +4,7 @@
       <div class="content">
         <img src="../assets/bg/cat6.webp" alt="Ошибка, котик грустный" class="error-image" width="200" height="200"></img>
         <h1 class="main-title">Ошибочка вышла :(</h1>
-        <h3 class="subtitle">Извинити.</h3>
+        <h2 class="subtitle">Извинити.</h2>
         <button @click="handleSearch">Попробовать еще раз</button>
       </div>
     </div>

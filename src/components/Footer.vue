@@ -39,6 +39,7 @@ const currentYear = computed(() => new Date().getFullYear());
 }
 
 .footer-text a {
+    color: var(--text-color);
     text-decoration: none;
     transition: opacity 0.3s ease;
 }
