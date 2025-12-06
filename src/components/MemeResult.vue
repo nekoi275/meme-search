@@ -15,7 +15,7 @@ import { ref } from 'vue'
 import type { MemeResponse } from '../api'
 import TelegramWidget from './TelegramWidget.vue'
 
-const props = defineProps<{
+defineProps<{
     meme: MemeResponse
 }>()
 
